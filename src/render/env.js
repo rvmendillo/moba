@@ -81,13 +81,13 @@ function paintGround(size) {
   const S = size / (EXT * 2); // px per meter
   const P = (x) => (x + EXT) * S;
   const col = canvasTex(size, size, (g) => {
-    g.fillStyle = '#e9f0fa'; g.fillRect(0, 0, size, size);
+    g.fillStyle = '#e1eaf8'; g.fillRect(0, 0, size, size);
     // soft tint variation
     let seed = 1;
     const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     for (let i = 0; i < 420; i++) {
       const x = rnd() * size, y = rnd() * size, r = (8 + rnd() * 30) * S;
-      const tints = ['rgba(196,214,245,0.10)', 'rgba(255,255,255,0.22)', 'rgba(210,200,245,0.08)', 'rgba(180,215,240,0.10)'];
+      const tints = ['rgba(170,196,240,0.16)', 'rgba(255,255,255,0.28)', 'rgba(196,180,245,0.13)', 'rgba(160,205,240,0.15)'];
       const gr = g.createRadialGradient(x, y, 0, x, y, r);
       gr.addColorStop(0, tints[i % 4]); gr.addColorStop(1, 'rgba(255,255,255,0)');
       g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
@@ -268,8 +268,8 @@ function rockGeometry(seed) {
   }
   g.computeVertexNormals();
   const pb = new PartBuilder();
-  const rock = new THREE.Color(0x7f8fab), rock2 = new THREE.Color(0x63728f), snow = new THREE.Color(0xf4f8ff);
-  pb.add(g, 0xffffff, null, { colorFn: (x, y, z, nx, ny, nz, c) => (ny > 0.42 + noise2(x * 3, z * 3) * 0.2 ? c.copy(snow) : c.copy(hash2(x * 9, z * 9) > 0.5 ? rock : rock2)) });
+  const rock = new THREE.Color(0x6a7a9c), rock2 = new THREE.Color(0x56658a), snow = new THREE.Color(0xf4f8ff);
+  pb.add(g, 0xffffff, null, { colorFn: (x, y, z, nx, ny, nz, c) => (ny > 0.72 + noise2(x * 3, z * 3) * 0.25 ? c.copy(snow) : c.copy(hash2(x * 9, z * 9) > 0.5 ? rock : rock2)) });
   return pb.geometry();
 }
 function crystalGeometry() {
@@ -355,7 +355,7 @@ export class Environment {
     const pos = geo.attributes.position;
     for (let i = 0; i < pos.count; i++) pos.setY(i, this.hf.at(pos.getX(i), pos.getZ(i)));
     geo.computeVertexNormals();
-    const mat = new THREE.MeshStandardMaterial({ map: col, emissiveMap: glow, emissive: 0xffffff, emissiveIntensity: 1.6, roughness: 0.88, metalness: 0.0, envMapIntensity: 0.55 });
+    const mat = new THREE.MeshStandardMaterial({ map: col, emissiveMap: glow, emissive: 0xffffff, emissiveIntensity: 1.6, roughness: 0.92, metalness: 0.0, envMapIntensity: 0.3 });
     injectWorld(mat, { sparkle: this.q >= 1 ? 2.4 : 0 });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.receiveShadow = true;
@@ -381,7 +381,7 @@ export class Environment {
     const geo = new THREE.PlaneGeometry(200, (RIVER_HALF_W + 0.9) * 2, 1, 1);
     geo.rotateX(-Math.PI / 2);
     geo.rotateY(-Math.PI / 4);
-    const mat = new THREE.MeshStandardMaterial({ color: 0xd8f2ff, map: tex, alphaMap: alpha, transparent: true, opacity: 0.78, roughness: 0.06, metalness: 0.15, envMapIntensity: 1.6, depthWrite: false });
+    const mat = new THREE.MeshStandardMaterial({ color: 0xa8e4ff, map: tex, alphaMap: alpha, transparent: true, opacity: 0.6, roughness: 0.12, metalness: 0.1, envMapIntensity: 1.1, depthWrite: false });
     injectWorld(mat, { sparkle: 1.5 });
     const m = new THREE.Mesh(geo, mat);
     m.position.y = -0.24;
@@ -430,13 +430,13 @@ export class Environment {
         continue;
       }
       // interior trees
-      for (let x = b.x0 + 0.6; x <= b.x1; x += 1.75) for (let z = b.z0 + 0.6; z <= b.z1; z += 1.75) {
-        const jx = x + (rnd() - 0.5) * 1.1, jz = z + (rnd() - 0.5) * 1.1;
+      for (let x = b.x0 + 0.5; x <= b.x1; x += 1.38) for (let z = b.z0 + 0.5; z <= b.z1; z += 1.38) {
+        const jx = x + (rnd() - 0.5) * 0.9, jz = z + (rnd() - 0.5) * 0.9;
         if (!pointInPoly(jx, jz, w)) continue;
         if (Math.abs(jx) > PLAY + 3 || Math.abs(jz) > PLAY + 3) continue;
         const edge = distToPolyEdge(jx, jz, w);
-        if (edge < 0.45) continue;
-        const sc = 0.75 + rnd() * 0.45 + Math.min(0.35, edge * 0.08);
+        if (edge < 0.3) continue;
+        const sc = 0.85 + rnd() * 0.45 + Math.min(0.45, edge * 0.12);
         (rnd() < 0.5 ? trees : trees2).push({ x: jx, z: jz, y: this.height(jx, jz) - 0.1, s: sc, sy: sc * (0.85 + rnd() * 0.35), ry: rnd() * 6.28 });
       }
       // crystals at a couple of edge points
@@ -508,7 +508,7 @@ export class Environment {
             if (dth < vNear * 0.7) discard;
           }`)
         .replace('#include <opaque_fragment>', `
-          if (uFowOn > 0.5) { float vis = texture2D(uFow, (vWorldP.xz + 60.0) / 120.0).r; outgoingLight *= mix(0.5, 1.0, vis); }
+          if (uFowOn > 0.5) { float vis = texture2D(uFow, (vWorldP.xz + 60.0) / 120.0).r; outgoingLight *= mix(0.66, 1.0, vis); }
           #include <opaque_fragment>`);
     };
     mat.customProgramCacheKey = () => 'grass';

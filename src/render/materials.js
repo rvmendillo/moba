@@ -126,8 +126,8 @@ export function injectWorld(mat, opts = {}) {
     if (opts.fow !== false) extra += `
       if (uFowOn > 0.5) {
         float vis = texture2D(uFow, (vWorldP.xz + 60.0) / 120.0).r;
-        outgoingLight *= mix(0.5, 1.0, vis);
-        outgoingLight = mix(outgoingLight, outgoingLight * vec3(0.78, 0.86, 1.08), (1.0 - vis) * 0.6);
+        outgoingLight *= mix(0.66, 1.0, vis);
+        outgoingLight = mix(outgoingLight, outgoingLight * vec3(0.86, 0.9, 1.04), (1.0 - vis) * 0.5);
       }`;
     frag = frag.replace('#include <opaque_fragment>', extra + '\n#include <opaque_fragment>');
     sh.fragmentShader = frag;
@@ -138,9 +138,9 @@ export function injectWorld(mat, opts = {}) {
 
 // toon material with rim light (anime look)
 export function toonMat(opts = {}) {
-  const m = new THREE.MeshToonMaterial({ color: opts.color ?? 0xffffff, vertexColors: opts.vertexColors !== false, gradientMap: gradientMap(), map: opts.map || null, transparent: !!opts.transparent });
-  const rim = new THREE.Color(opts.rim ?? 0xcfe8ff);
-  const rimK = opts.rimK ?? 0.55;
+  const m = new THREE.MeshToonMaterial({ color: opts.color ?? 0xd6d6d6, vertexColors: opts.vertexColors !== false, gradientMap: gradientMap(), map: opts.map || null, transparent: !!opts.transparent });
+  const rim = new THREE.Color(opts.rim ?? 0xcfe8ff).lerp(new THREE.Color(0xffffff), 0.45);
+  const rimK = opts.rimK ?? 0.22;
   m.onBeforeCompile = (sh) => {
     sh.uniforms.uRim = { value: rim };
     sh.uniforms.uRimK = { value: rimK };
@@ -150,7 +150,7 @@ export function toonMat(opts = {}) {
       .replace('#include <opaque_fragment>', `
         {
           vec3 vd = normalize(vViewPosition);
-          float rimF = pow(1.0 - clamp(dot(normal, -vd), 0.0, 1.0), 2.6);
+          float rimF = pow(1.0 - clamp(dot(normal, -vd), 0.0, 1.0), 3.5);
           float up = clamp(normal.y * 0.5 + 0.5, 0.0, 1.0);
           outgoingLight += uRim * rimF * uRimK * (0.55 + 0.45 * up);
           outgoingLight = mix(outgoingLight, vec3(1.0, 0.95, 0.9) * 1.6, uFlash);
