@@ -66,7 +66,7 @@ class Particles {
       const k = this.life[i] / this.max[i];
       ap[i * 3] = P[i * 3]; ap[i * 3 + 1] = P[i * 3 + 1]; ap[i * 3 + 2] = P[i * 3 + 2];
       const a = Math.min(1, k * 2.5) * Math.min(1, (1 - k) * 8 + 0.3);
-      ac[i * 4] = this.col[i * 3] * 1.6; ac[i * 4 + 1] = this.col[i * 3 + 1] * 1.6; ac[i * 4 + 2] = this.col[i * 3 + 2] * 1.6; ac[i * 4 + 3] = a;
+      ac[i * 4] = this.col[i * 3] * 1.15; ac[i * 4 + 1] = this.col[i * 3 + 1] * 1.15; ac[i * 4 + 2] = this.col[i * 3 + 2] * 1.15; ac[i * 4 + 3] = a * 0.85;
       as[i * 2] = this.size[i] * (1 + this.grow[i] * (1 - k)); as[i * 2 + 1] = this.shape[i];
     }
     this.aPos.needsUpdate = true; this.aCol.needsUpdate = true; this.aSz.needsUpdate = true;
@@ -84,11 +84,11 @@ const quadGeo = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2).translate(0,
 
 function softMat(color, kind = 'ring') {
   const frag = {
-    ring: `uniform vec3 uColor; uniform float uAlpha; varying vec2 vUv; void main(){ gl_FragColor = vec4(uColor * 2.2, uAlpha); }`,
+    ring: `uniform vec3 uColor; uniform float uAlpha; varying vec2 vUv; void main(){ gl_FragColor = vec4(uColor * 1.5, uAlpha * 0.85); }`,
     disc: `uniform vec3 uColor; uniform float uAlpha; uniform float uTime; varying vec2 vUv; void main(){ vec2 d = vUv - 0.5; float r = length(d) * 2.0; float edge = smoothstep(0.82, 0.97, r) * (1.0 - smoothstep(0.97, 1.0, r)); float fill = (1.0 - r) * 0.35 + 0.12; float rings = 0.5 + 0.5 * sin(r * 28.0 - uTime * 4.0); gl_FragColor = vec4(uColor * 1.6, (edge * 1.2 + fill * (0.6 + 0.4 * rings)) * uAlpha * step(r, 1.0)); }`,
-    pillar: `uniform vec3 uColor; uniform float uAlpha; varying vec2 vUv; void main(){ float a = (1.0 - vUv.y) * (0.55 + 0.45 * sin(vUv.x * 50.0)) ; gl_FragColor = vec4(uColor * 2.0, a * uAlpha); }`,
-    beam: `uniform vec3 uColor; uniform float uAlpha; varying vec2 vUv; void main(){ float a = 1.0 - abs(vUv.x - 0.5) * 2.0; gl_FragColor = vec4(uColor * 2.4, a * a * uAlpha); }`,
-    slash: `uniform vec3 uColor; uniform float uAlpha; varying vec2 vUv; void main(){ float a = smoothstep(0.0, 0.6, vUv.x) * (1.0 - smoothstep(0.9, 1.0, vUv.x)); gl_FragColor = vec4(uColor * 2.4, a * uAlpha); }`,
+    pillar: `uniform vec3 uColor; uniform float uAlpha; varying vec2 vUv; void main(){ float a = (1.0 - vUv.y) * (0.55 + 0.45 * sin(vUv.x * 50.0)) ; gl_FragColor = vec4(uColor * 1.3, a * uAlpha * 0.75); }`,
+    beam: `uniform vec3 uColor; uniform float uAlpha; varying vec2 vUv; void main(){ float a = 1.0 - abs(vUv.x - 0.5) * 2.0; gl_FragColor = vec4(uColor * 1.8, a * a * uAlpha); }`,
+    slash: `uniform vec3 uColor; uniform float uAlpha; varying vec2 vUv; void main(){ float a = smoothstep(0.0, 0.6, vUv.x) * (1.0 - smoothstep(0.9, 1.0, vUv.x)); gl_FragColor = vec4(uColor * 1.8, a * uAlpha); }`,
   }[kind];
   return new THREE.ShaderMaterial({
     uniforms: { uColor: { value: new THREE.Color(color) }, uAlpha: { value: 1 }, uTime: U.uTime },

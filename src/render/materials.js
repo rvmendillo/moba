@@ -117,7 +117,12 @@ export function injectWorld(mat, opts = {}) {
     let frag = sh.fragmentShader.replace('#include <common>', `#include <common>
       varying vec3 vWorldP; varying float vOcc;
       uniform float uTime; uniform sampler2D uFow; uniform float uFowOn; uniform vec3 uPlayer;
-      float hash12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }`);
+      float hash12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+      float bayer4(vec2 fc){ vec2 p = mod(floor(fc), 4.0); float i = p.x + p.y * 4.0;
+        if (i < 0.5) return 0.0/16.0; if (i < 1.5) return 8.0/16.0; if (i < 2.5) return 2.0/16.0; if (i < 3.5) return 10.0/16.0;
+        if (i < 4.5) return 12.0/16.0; if (i < 5.5) return 4.0/16.0; if (i < 6.5) return 14.0/16.0; if (i < 7.5) return 6.0/16.0;
+        if (i < 8.5) return 3.0/16.0; if (i < 9.5) return 11.0/16.0; if (i < 10.5) return 1.0/16.0; if (i < 11.5) return 9.0/16.0;
+        if (i < 12.5) return 15.0/16.0; if (i < 13.5) return 7.0/16.0; if (i < 14.5) return 13.0/16.0; return 5.0/16.0; }`);
     let extra = '';
     if (opts.sparkle) extra += `
       {
@@ -139,7 +144,7 @@ export function injectWorld(mat, opts = {}) {
       }`;
     frag = frag.replace('#include <opaque_fragment>', extra + '\n#include <opaque_fragment>');
     if (opts.occlude) frag = frag.replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
-      if (vOcc > 0.01) { vec2 dp = floor(gl_FragCoord.xy * 0.5); float dth = fract(sin(dot(dp, vec2(12.9898, 78.233))) * 43758.5453); if (dth < vOcc * 0.72) discard; }`);
+      if (vOcc > 0.01) { if (bayer4(gl_FragCoord.xy) < vOcc * 0.7) discard; }`);
     sh.fragmentShader = frag;
   };
   mat.customProgramCacheKey = () => 'world' + (opts.sparkle || 0) + (opts.fow === false ? 'nf' : 'f') + (opts.occlude ? 'o' : '') + (mat.type);

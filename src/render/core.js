@@ -9,7 +9,7 @@ import { Environment } from './env.js';
 import { U } from './materials.js';
 
 const GradeShader = {
-  uniforms: { tDiffuse: { value: null }, uVig: { value: 0.6 }, uSat: { value: 1.2 }, uGray: { value: 0 } },
+  uniforms: { tDiffuse: { value: null }, uVig: { value: 0.65 }, uSat: { value: 1.3 }, uGray: { value: 0 } },
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
   fragmentShader: `uniform sampler2D tDiffuse; uniform float uVig; uniform float uSat; uniform float uGray; varying vec2 vUv;
     void main(){
@@ -18,7 +18,7 @@ const GradeShader = {
       c.rgb = mix(c.rgb, c.rgb * vec3(0.9, 0.96, 1.1), (1.0 - l) * 0.4);
       c.rgb = mix(c.rgb, c.rgb * vec3(1.04, 1.0, 0.97), l * 0.25);
       c.rgb = mix(vec3(l), c.rgb, uSat * (1.0 - uGray));
-      c.rgb = clamp((c.rgb - 0.5) * 1.06 + 0.5, 0.0, 1.0);
+      c.rgb = clamp((c.rgb - 0.5) * 1.1 + 0.5, 0.0, 1.0);
       vec2 d = vUv - 0.5;
       c.rgb *= 1.0 - dot(d, d) * uVig;
       gl_FragColor = c;
@@ -38,7 +38,7 @@ export class RenderCore {
     this.q = quality;
     const r = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', stencil: false, alpha: false });
     r.toneMapping = THREE.ACESFilmicToneMapping;
-    r.toneMappingExposure = 1.0;
+    r.toneMappingExposure = 0.96;
     r.outputColorSpace = THREE.SRGBColorSpace;
     r.shadowMap.enabled = QUALITY[quality].shadows;
     r.shadowMap.type = THREE.PCFShadowMap;

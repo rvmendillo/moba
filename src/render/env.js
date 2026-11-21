@@ -81,7 +81,7 @@ function paintGround(size) {
   const S = size / (EXT * 2); // px per meter
   const P = (x) => (x + EXT) * S;
   const col = canvasTex(size, size, (g) => {
-    g.fillStyle = '#e1eaf8'; g.fillRect(0, 0, size, size);
+    g.fillStyle = '#dae4f6'; g.fillRect(0, 0, size, size);
     // soft tint variation
     let seed = 1;
     const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -503,8 +503,9 @@ export class Environment {
       sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vNear; varying vec3 vWorldP; uniform sampler2D uFow; uniform float uFowOn;')
         .replace('#include <alphatest_fragment>', `#include <alphatest_fragment>
           if (vNear > 0.01) {
-            vec2 sp = floor(gl_FragCoord.xy * 0.5);
-            float dth = fract(sin(dot(sp, vec2(12.9898, 78.233))) * 43758.5453);
+            vec2 bp = mod(floor(gl_FragCoord.xy), 4.0);
+            float bi = bp.x + bp.y * 4.0;
+            float dth = mod(bi * 7.0, 16.0) / 16.0;
             if (dth < vNear * 0.7) discard;
           }`)
         .replace('#include <opaque_fragment>', `

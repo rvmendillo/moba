@@ -122,8 +122,8 @@ export class MatchSession {
         }
         this.acc -= DT; n++;
       }
-      if (this.world.over && !this.ended && !this.endT) { this.endT = this.app.time + 3.2; if (this.net) this.net.broadcast({ t: 'end', winner: this.world.winner }); }
-      if (this.endT && this.app.time >= this.endT) this.finish(this.world.winner);
+      if (this.world.over && !this.ended && !this.endT) { this.endT = performance.now() / 1000 + 3.2; if (this.net) this.net.broadcast({ t: 'end', winner: this.world.winner }); }
+      if (this.endT && performance.now() / 1000 >= this.endT) this.finish(this.world.winner);
     } else {
       this.inT -= dt;
       const inp = this.hud.input;
@@ -132,8 +132,8 @@ export class MatchSession {
         this.inT = 0.1; this.lastIn = key;
         this.net.send('host', { t: 'in', mx: +inp.mx.toFixed(3), mz: +inp.mz.toFixed(3), atk: inp.atk ? 1 : 0, mode: inp.mode });
       }
-      if (this.state.over >= 0 && !this.endT) this.endT = this.app.time + 3.2;
-      if (this.endT && this.app.time >= this.endT) this.finish(this.state.over);
+      if (this.state.over >= 0 && !this.endT) this.endT = performance.now() / 1000 + 3.2;
+      if (this.endT && performance.now() / 1000 >= this.endT) this.finish(this.state.over);
     }
     this.view.frame(dt);
     this.hud.frame(dt, this.app.fps);

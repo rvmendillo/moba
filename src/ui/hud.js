@@ -61,7 +61,8 @@ export class Hud {
     this.joyZone = h('div.joyzone');
     this.joy = h('div.joy', {}, this.knob = h('div.knob'));
     this.joy.style.opacity = '0.45';
-    R.append(this.joyZone, this.joy);
+    R.prepend(this.joyZone); // keep the joystick zone beneath every button
+    R.append(this.joy);
     this.bindJoystick();
     // skill buttons
     const def = this.s.heroDef || HEROES[this.myHero()?.def ?? 0];
