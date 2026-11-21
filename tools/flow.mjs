@@ -2,13 +2,13 @@
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
-const out = process.argv[2] || '/tmp/claude-0/flow';
+const out = process.argv[2] || (await import('node:os')).tmpdir() + '/flow';
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--autoplay-policy=no-user-gesture-required'] });
 const page = await browser.newPage({ viewport: { width: 932, height: 430 }, deviceScaleFactor: 1, hasTouch: true });
 const logs = [];
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') logs.push(m.type() + ': ' + m.text()); });
 page.on('pageerror', (e) => logs.push('PAGEERROR: ' + e.message + '\n' + (e.stack || '').split('\n').slice(0, 4).join('\n')));
-await page.goto('file:///home/user/moba/dist/index.html');
+await page.goto('file://' + process.cwd() + '/dist/index.html');
 await page.waitForTimeout(9000);
 await page.screenshot({ path: out + '_1menu.png' });
 await page.getByText('Battle  ·  5v5 vs AI').click();
