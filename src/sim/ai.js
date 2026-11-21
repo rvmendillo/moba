@@ -89,7 +89,7 @@ export class BotBrain {
     this.stuckT += dt;
     if (this.stuckT > 1.5) {
       const moved = Math.hypot(h.x - this.lastPos[0], h.z - this.lastPos[1]);
-      if (moved < 0.5 && (inp.mx || inp.mz)) { this.path = null; this.pathT = 0; const a = w.rng() * Math.PI * 2; inp.mx = Math.cos(a); inp.mz = Math.sin(a); }
+      if (moved < 0.5 && (inp.mx || inp.mz)) { this.path = null; this.pathT = 0; this.forcePath = w.time + 2.5; const a = w.rng() * Math.PI * 2; inp.mx = Math.cos(a); inp.mz = Math.sin(a); }
       this.lastPos = [h.x, h.z]; this.stuckT = 0;
     }
   }
@@ -111,14 +111,14 @@ export class BotBrain {
   steerDir(x, z) {
     const w = this.w, h = this.h;
     let tx = x, tz = z;
-    if (!w.nav.lineClear(h.x, h.z, x, z, true)) {
+    if (this.forcePath > w.time || !w.nav.lineClear(h.x, h.z, x, z, false, w.nav.blocked(x, z) ? 3.2 : 0)) {
       if (!this.path || !this.pathGoal || Math.hypot(this.pathGoal[0] - x, this.pathGoal[1] - z) > 2.5 || w.time > this.pathT) {
         this.path = w.nav.findPath(h.x, h.z, x, z) || [[x, z]];
         this.pathGoal = [x, z]; this.pathT = w.time + 1.5;
       }
       const P = this.path;
-      while (P.length > 1 && Math.hypot(P[0][0] - h.x, P[0][1] - h.z) < 1.0) P.shift();
-      if (P.length > 1 && w.nav.lineClear(h.x, h.z, P[1][0], P[1][1], true)) P.shift();
+      while (P.length > 1 && Math.hypot(P[0][0] - h.x, P[0][1] - h.z) < 0.4) P.shift();
+      if (P.length > 1 && w.nav.lineClear(h.x, h.z, P[1][0], P[1][1])) P.shift();
       tx = P[0][0]; tz = P[0][1];
     } else this.path = null;
     const dx = tx - h.x, dz = tz - h.z, l = Math.hypot(dx, dz) || 1;

@@ -1039,13 +1039,13 @@ export class World {
   // move toward a point, using A* when a wall is in the way
   steer(u, x, z, dt, speedK = 1) {
     let tx = x, tz = z;
-    if (!this.nav.lineClear(u.x, u.z, x, z, true)) {
+    if (!this.nav.lineClear(u.x, u.z, x, z, false, this.nav.blocked(x, z) ? 3.2 : 0)) {
       if (!u.path || !u.pathGoal || Math.hypot(u.pathGoal[0] - x, u.pathGoal[1] - z) > 2 || this.time > u.pathT) {
         u.path = this.nav.findPath(u.x, u.z, x, z) || [[x, z]];
         u.pathGoal = [x, z]; u.pathT = this.time + 1.2;
       }
-      while (u.path.length > 1 && Math.hypot(u.path[0][0] - u.x, u.path[0][1] - u.z) < 0.8) u.path.shift();
-      if (u.path.length > 1 && this.nav.lineClear(u.x, u.z, u.path[1][0], u.path[1][1], true)) u.path.shift();
+      while (u.path.length > 1 && Math.hypot(u.path[0][0] - u.x, u.path[0][1] - u.z) < 0.4) u.path.shift();
+      if (u.path.length > 1 && this.nav.lineClear(u.x, u.z, u.path[1][0], u.path[1][1])) u.path.shift();
       tx = u.path[0][0]; tz = u.path[0][1];
     } else u.path = null;
     const dx = tx - u.x, dz = tz - u.z, l = Math.hypot(dx, dz);

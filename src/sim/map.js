@@ -240,12 +240,13 @@ export class NavGrid {
     return this.bush[j * N + i];
   }
   // straight-line walkability check (fine grid)
-  lineClear(x0, z0, x1, z1, ignoreStruct = false) {
+  lineClear(x0, z0, x1, z1, ignoreStruct = false, endTrim = 0) {
     const dx = x1 - x0, dz = z1 - z0;
     const len = Math.sqrt(dx * dx + dz * dz);
     const steps = Math.ceil(len / (RES * 0.5));
+    const tMax = len > 0 ? Math.max(0, (len - endTrim) / len) : 1;
     for (let s = 1; s <= steps; s++) {
-      const t = s / steps;
+      const t = (s / steps) * tMax;
       const x = x0 + dx * t, z = z0 + dz * t;
       if (ignoreStruct ? this.wallAt(x, z) : this.blocked(x, z)) return false;
     }
