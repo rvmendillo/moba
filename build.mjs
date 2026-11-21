@@ -44,4 +44,25 @@ if (watch) {
     fs.writeFileSync(path.join(outdir, 'frostvale.html'), out);
     console.log('single file:', path.join(outdir, 'frostvale.html'), (out.length / 1024 / 1024).toFixed(2), 'MB');
   }
+  const art = process.argv.find((a) => a.startsWith('--artifact='))?.slice(11);
+  if (art) {
+    // claude.ai artifact variant: the host adds the document skeleton, so emit title + style + body content + script
+    const css = fs.readFileSync(path.join(outdir, 'style.css'), 'utf8');
+    const js = fs.readFileSync(path.join(outdir, 'game.js'), 'utf8');
+    const page = `<title>Frostvale Legends</title>
+<style>
+:root { color-scheme: dark; }
+${css}
+</style>
+<canvas id="gl"></canvas>
+<canvas id="ov"></canvas>
+<div id="ui"></div>
+<div id="rotate"><div>↻</div><p>Rotate your iPhone to landscape</p></div>
+<script>
+${js.replace(/<\/script/g, '<\\/script')}
+</script>
+`;
+    fs.writeFileSync(art, page);
+    console.log('artifact page:', art, (page.length / 1024 / 1024).toFixed(2), 'MB');
+  }
 }
