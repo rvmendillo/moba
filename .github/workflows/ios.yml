@@ -1,0 +1,75 @@
+name: Build iOS app (IPA)
+
+on:
+  push:
+    branches: [main, 'claude/**']
+  workflow_dispatch:
+
+jobs:
+  ipa:
+    name: Build unsigned IPA
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Build web game
+        run: |
+          npm ci
+          npm run build -- --single
+          rm -rf ios/Frostvale/www
+          mkdir -p ios/Frostvale/www
+          cp dist/index.html dist/game.js dist/style.css dist/manifest.webmanifest dist/icon-512.png ios/Frostvale/www/
+
+      - name: Generate Xcode project
+        run: |
+          brew install xcodegen
+          cd ios && xcodegen generate
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Compile for iPhone (unsigned)
+        run: |
+          cd ios
+          xcodebuild \
+            -project Frostvale.xcodeproj \
+            -scheme Frostvale \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build | tail -n 60
+          test -d build/Build/Products/Release-iphoneos/Frostvale.app
+
+      - name: Package IPA
+        run: |
+          cd ios
+          rm -rf Payload && mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/Frostvale.app Payload/
+          zip -qry ../Frostvale-unsigned.ipa Payload
+          cd .. && ls -la Frostvale-unsigned.ipa
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Frostvale-unsigned-ipa
+          path: Frostvale-unsigned.ipa
+          retention-days: 30
+
+      - name: Upload single-file web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Frostvale-web
+          path: |
+            dist/frostvale.html
+            dist/index.html
+            dist/game.js
+            dist/style.css
+          retention-days: 30

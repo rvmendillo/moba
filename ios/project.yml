@@ -1,0 +1,45 @@
+name: Frostvale
+options:
+  bundleIdPrefix: com.frostvale
+  deploymentTarget:
+    iOS: "15.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Frostvale:
+    type: application
+    platform: iOS
+    sources:
+      - path: Frostvale
+        excludes:
+          - "www"
+          - "www/**"
+          - "Info.plist"
+      - path: Frostvale/www
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_NAME: Frostvale
+        PRODUCT_BUNDLE_IDENTIFIER: com.frostvale.legends
+        INFOPLIST_FILE: Frostvale/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_BITCODE: NO
+        SUPPORTS_MACCATALYST: NO
+        SWIFT_OPTIMIZATION_LEVEL: "-O"
+schemes:
+  Frostvale:
+    build:
+      targets:
+        Frostvale: all
+    run:
+      config: Debug
+    archive:
+      config: Release

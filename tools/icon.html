@@ -1,0 +1,55 @@
+<!doctype html><html><body style="margin:0;background:#000">
+<canvas id="c" width="1024" height="1024"></canvas>
+<script>
+const c = document.getElementById('c'), g = c.getContext('2d'), S = 1024;
+// background
+let gr = g.createRadialGradient(S * 0.5, S * 0.42, 40, S * 0.5, S * 0.55, S * 0.78);
+gr.addColorStop(0, '#3b5fd0'); gr.addColorStop(0.45, '#1b2f7a'); gr.addColorStop(1, '#070e2a');
+g.fillStyle = gr; g.fillRect(0, 0, S, S);
+// aurora ribbons
+for (const [y, col, amp, w] of [[250, 'rgba(110,255,200,0.55)', 70, 120], [330, 'rgba(160,120,255,0.45)', 60, 110], [200, 'rgba(120,220,255,0.35)', 50, 90]]) {
+  g.save(); g.filter = 'blur(28px)'; g.strokeStyle = col; g.lineWidth = w; g.beginPath();
+  for (let x = -100; x <= S + 100; x += 20) { const yy = y + Math.sin(x / 140) * amp + Math.sin(x / 57) * 18; x === -100 ? g.moveTo(x, yy) : g.lineTo(x, yy); }
+  g.stroke(); g.restore();
+}
+// stars
+for (let i = 0; i < 90; i++) { const x = (i * 197) % S, y = (i * 331) % (S * 0.55); g.fillStyle = `rgba(255,255,255,${0.3 + (i % 5) / 8})`; g.beginPath(); g.arc(x, y, 1.5 + (i % 3), 0, 6.28); g.fill(); }
+// snowy hills
+g.fillStyle = '#dfeafc';
+g.beginPath(); g.moveTo(0, S * 0.84); g.quadraticCurveTo(S * 0.3, S * 0.74, S * 0.55, S * 0.82); g.quadraticCurveTo(S * 0.8, S * 0.9, S, S * 0.8); g.lineTo(S, S); g.lineTo(0, S); g.fill();
+g.fillStyle = '#b9cdf0';
+g.beginPath(); g.moveTo(0, S * 0.92); g.quadraticCurveTo(S * 0.45, S * 0.84, S, S * 0.94); g.lineTo(S, S); g.lineTo(0, S); g.fill();
+// crossed swords
+function sword(angle) {
+  g.save(); g.translate(S / 2, S * 0.54); g.rotate(angle);
+  g.shadowColor = 'rgba(120,220,255,0.9)'; g.shadowBlur = 30;
+  let bl = g.createLinearGradient(-22, 0, 22, 0); bl.addColorStop(0, '#9fd6ff'); bl.addColorStop(0.5, '#ffffff'); bl.addColorStop(1, '#6fa8e8');
+  g.fillStyle = bl; g.beginPath(); g.moveTo(0, -420); g.lineTo(26, -360); g.lineTo(22, 120); g.lineTo(-22, 120); g.lineTo(-26, -360); g.closePath(); g.fill();
+  g.shadowBlur = 0;
+  g.fillStyle = '#ffd36b'; g.fillRect(-90, 112, 180, 30); g.beginPath(); g.arc(-92, 127, 22, 0, 6.28); g.arc(92, 127, 22, 0, 6.28); g.fill();
+  g.fillStyle = '#5a3a2a'; g.fillRect(-16, 142, 32, 120);
+  g.fillStyle = '#ffd36b'; g.beginPath(); g.arc(0, 272, 26, 0, 6.28); g.fill();
+  g.restore();
+}
+sword(-0.62); sword(0.62);
+// ice crystal emblem
+g.save(); g.translate(S / 2, S * 0.47);
+g.shadowColor = 'rgba(140,240,255,1)'; g.shadowBlur = 80;
+const pts = [[0, -300], [170, -60], [110, 240], [0, 300], [-110, 240], [-170, -60]];
+let cg = g.createLinearGradient(-170, -300, 170, 300); cg.addColorStop(0, '#ffffff'); cg.addColorStop(0.35, '#b8f3ff'); cg.addColorStop(0.7, '#5fb8ff'); cg.addColorStop(1, '#7a5cff');
+g.fillStyle = cg; g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); g.fill();
+g.shadowBlur = 0;
+// facets
+const facets = [[[0, -300], [170, -60], [0, 0]], [[0, -300], [-170, -60], [0, 0]], [[170, -60], [110, 240], [0, 0]], [[-170, -60], [-110, 240], [0, 0]], [[110, 240], [0, 300], [0, 0]], [[-110, 240], [0, 300], [0, 0]]];
+const fc = ['rgba(255,255,255,0.55)', 'rgba(255,255,255,0.25)', 'rgba(60,120,255,0.25)', 'rgba(150,240,255,0.3)', 'rgba(110,70,255,0.3)', 'rgba(40,90,220,0.35)'];
+facets.forEach((f, i) => { g.fillStyle = fc[i]; g.beginPath(); f.forEach(([x, y], j) => (j ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); g.fill(); });
+g.strokeStyle = 'rgba(255,255,255,0.9)'; g.lineWidth = 6; g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); g.stroke();
+// inner snowflake
+g.strokeStyle = 'rgba(255,255,255,0.95)'; g.lineWidth = 12; g.lineCap = 'round';
+for (let k = 0; k < 6; k++) { g.save(); g.rotate(k * Math.PI / 3); g.beginPath(); g.moveTo(0, 0); g.lineTo(0, -95); g.moveTo(0, -55); g.lineTo(-28, -82); g.moveTo(0, -55); g.lineTo(28, -82); g.stroke(); g.restore(); }
+g.restore();
+// sparkles
+function sparkle(x, y, r) { g.save(); g.translate(x, y); g.fillStyle = '#fff'; g.shadowColor = '#bff6ff'; g.shadowBlur = 20; g.beginPath(); for (let k = 0; k < 4; k++) { g.rotate(Math.PI / 2); g.moveTo(-r * 0.18, 0); g.lineTo(0, -r); g.lineTo(r * 0.18, 0); } g.fill(); g.restore(); }
+sparkle(250, 300, 60); sparkle(800, 260, 46); sparkle(760, 620, 38); sparkle(290, 660, 30); sparkle(520, 120, 28);
+window.done = true;
+</script></body></html>

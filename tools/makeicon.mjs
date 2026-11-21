@@ -1,0 +1,12 @@
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const { chromium } = require('playwright');
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1024, height: 1024 }, deviceScaleFactor: 1 });
+await page.goto('file:///home/user/moba/tools/icon.html');
+await page.waitForFunction(() => window.done);
+await page.locator('#c').screenshot({ path: 'ios/Frostvale/Assets.xcassets/AppIcon.appiconset/icon-1024.png', omitBackground: false });
+const small = await page.evaluate(() => { const c = document.createElement('canvas'); c.width = c.height = 512; c.getContext('2d').drawImage(document.getElementById('c'), 0, 0, 512, 512); return c.toDataURL('image/png').split(',')[1]; });
+(await import('node:fs')).writeFileSync('public/icon-512.png', Buffer.from(small, 'base64'));
+await browser.close();
+console.log('icons written');
