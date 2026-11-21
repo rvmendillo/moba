@@ -50,9 +50,14 @@ export class GameView {
     this.towerRings = new Map();
   }
   dispose() {
-    for (const v of this.views.values()) this.scene.remove(v.root);
+    for (const v of this.views.values()) { this.scene.remove(v.root); if (v.pet) this.scene.remove(v.pet.root); }
+    for (const r of this.towerRings.values()) this.scene.remove(r);
+    this.views.clear(); this.towerRings.clear();
     this.scene.remove(this.fx.group); this.scene.remove(this.fx.parts.points);
+    this.fx.parts.geo.dispose();
     U.uFowOn.value = 0;
+    this.core.grade.uniforms.uGray.value = 0;
+    this.core.shake = 0;
   }
   // ---------------------------------------------------------------- unit views
   makeView(u) {

@@ -475,5 +475,5 @@ export class Hud {
           h('button.btn.ghost', { onclick: () => { this.closePanel(); this.s.quit(); } }, 'Quit to menu'))));
     this.openPanel(P);
   }
-  dispose() { window.removeEventListener('keydown', this.onKey); window.removeEventListener('keyup', this.onKey); this.root.remove(); }
+  dispose() { window.removeEventListener('keydown', this.onKey); window.removeEventListener('keyup', this.onKey); this.aimInd.g.parent && this.aimInd.g.parent.remove(this.aimInd.g); this.root.remove(); }
 }

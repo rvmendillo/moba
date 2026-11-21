@@ -84,7 +84,9 @@ export class RenderCore {
     const Q = QUALITY[this.q];
     const r = this.renderer;
     if (this.composer) this.composer.dispose?.();
-    const rt = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, samples: Q.msaa });
+    const ext = r.extensions;
+    const hdr = ext.has('EXT_color_buffer_half_float') || ext.has('EXT_color_buffer_float');
+    const rt = new THREE.WebGLRenderTarget(4, 4, { type: hdr ? THREE.HalfFloatType : THREE.UnsignedByteType, samples: Q.msaa });
     this.composer = new EffectComposer(r, rt);
     this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.42, 0.4, 1.2);

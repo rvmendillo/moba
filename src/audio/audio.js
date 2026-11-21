@@ -111,7 +111,7 @@ export class AudioEngine {
       case 'swing': S.noise(o, t, 0.16, { f: 2200, f2: 500, q: 1.5, vol: 0.18 }); break;
       case 'hit': S.noise(o, t, 0.08, { type: 'lowpass', f: 1800, vol: 0.25 }); S.tone(o, t, 180, 0.1, { vol: 0.18, f2: 80 }); break;
       case 'hitMetal': S.bell(o, t, 520 + Math.random() * 80, 0.2, 0.1); S.noise(o, t, 0.06, { f: 4000, vol: 0.15 }); break;
-      case 'bow': case 'arrow': S.tone(o, t, 380, 0.12, { type: 'triangle', vol: 0.12, f2: 160 }); S.noise(o, t, 0.1, { f: 3000, f2: 1200, vol: 0.08 }); break;
+      case 'bow': case 'arrow': case 'bowHeavy': S.tone(o, t, 380, 0.12, { type: 'triangle', vol: 0.12, f2: 160 }); S.noise(o, t, 0.1, { f: 3000, f2: 1200, vol: 0.08 }); break;
       case 'magic': S.tone(o, t, 900, 0.18, { vol: 0.08, f2: 1500 }); S.bell(o, t, 1800 + Math.random() * 300, 0.3, 0.05); break;
       case 'towerShot': S.tone(o, t, 900, 0.25, { type: 'sawtooth', vol: 0.05, f2: 300 }); S.bell(o, t, 1200, 0.3, 0.06); break;
       case 'iceCast': case 'charge': S.noise(o, t, 0.35, { f: 3000, f2: 7000, q: 4, vol: 0.08 }); [1760, 2349, 2637].forEach((f, i) => S.bell(o, t + i * 0.04, f, 0.4, 0.05)); break;
