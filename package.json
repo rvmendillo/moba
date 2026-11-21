@@ -1,0 +1,21 @@
+{
+  "name": "frostvale-legends",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frostvale Legends - an original 5v5 3-lane MOBA for iPhone (WebGL + native iOS wrapper)",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch & node server/relay.js",
+    "serve": "node server/relay.js",
+    "simtest": "node tools/simtest.mjs",
+    "ios:prepare": "node build.mjs && rm -rf ios/Frostvale/www && cp -R dist ios/Frostvale/www"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "ws": "8.23.0"
+  }
+}

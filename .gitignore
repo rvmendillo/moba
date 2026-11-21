@@ -1,0 +1,7 @@
+node_modules/
+dist/
+ios/Frostvale/www/
+ios/*.xcodeproj/
+ios/build/
+*.ipa
+.DS_Store
