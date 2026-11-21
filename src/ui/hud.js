@@ -332,8 +332,8 @@ export class Hud {
   }
   // next affordable step of the recommended build
   nextBuild(hero) {
-    if (!this.build) this.build = effectiveBuild(HEROES[hero.def].build, this.s.itemAvail);
-    const build = this.build;
+    if (!this.buildList) this.buildList = effectiveBuild(HEROES[hero.def].build, this.s.itemAvail);
+    const build = this.buildList;
     for (const id of build) {
       if (hero.items.includes(id)) continue;
       const it = ITEM_BY_ID[id];
