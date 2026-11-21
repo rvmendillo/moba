@@ -452,10 +452,10 @@ export class Environment {
       crystals.push({ x, z, y: this.height(x, z) - 0.1, s: 0.7 + rnd() * 0.3, ry: rnd() * 6 });
     }
     this.treeGeo = treeGeometry(0);
-    const treeMat = injectWorld(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, envMapIntensity: 0.5 }));
+    const treeMat = injectWorld(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, envMapIntensity: 0.5 }), { occlude: true });
     this.trees = this.instanced(this.treeGeo, treeMat, trees, { cast: true, receive: true });
     this.trees2 = this.instanced(treeGeometry(1), treeMat, trees2, { cast: true, receive: true });
-    const rockMat = injectWorld(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, flatShading: true, envMapIntensity: 0.6 }));
+    const rockMat = injectWorld(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, flatShading: true, envMapIntensity: 0.6 }), { occlude: true });
     rocks.forEach((list, i) => this.instanced(rockGeometry(i * 3.7), rockMat, list, { cast: true, receive: true }));
     const cg = crystalGeometry();
     const cmat = injectWorld(new THREE.MeshStandardMaterial({ vertexColors: true, color: 0xbfefff, emissive: 0x2fa6e0, emissiveIntensity: 1.25, roughness: 0.15, metalness: 0.2, envMapIntensity: 1.5 }), { fow: false });
@@ -534,9 +534,9 @@ export class Environment {
       const m1 = pb.mesh(injectWorld(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.35, metalness: 0.15, envMapIntensity: 1.2 })));
       m1.receiveShadow = true; m1.castShadow = true;
       g.add(m1);
-      const gm = gb.mesh(new THREE.MeshStandardMaterial({ vertexColors: true, emissive: tc, emissiveIntensity: 2.2, roughness: 0.2 }));
+      const gm = gb.mesh(new THREE.MeshStandardMaterial({ vertexColors: true, emissive: tc, emissiveIntensity: 1.1, roughness: 0.2 }));
       g.add(gm);
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.06, 8, 48), new THREE.MeshBasicMaterial({ color: new THREE.Color(tc).multiplyScalar(2.5) }));
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.06, 8, 48), new THREE.MeshBasicMaterial({ color: new THREE.Color(tc).multiplyScalar(1.6) }));
       ring.position.y = 3.2; ring.rotation.x = Math.PI / 2;
       g.add(ring);
       this.anim.push((t) => { gm.children; ring.rotation.z = t * 0.8; ring.position.y = 3.2 + Math.sin(t * 1.3) * 0.25; });
@@ -608,6 +608,9 @@ export class Environment {
       if (Math.abs(riverU(x, z)) < RIVER_HALF_W + 1 && e < 20) continue;
       const y = this.height(x, z);
       const r = rnd();
+      // keep the north/south strips (between the camera and the lanes) free of tall trees
+      const camStrip = Math.abs(z) > PLAY && Math.abs(z) < PLAY + 24 && Math.abs(x) < EXT;
+      if (camStrip) { if (r < 0.5) rocks.push({ x, y: y - 0.25, z, s: 0.8 + rnd() * 1.2, sy: 0.6 + rnd() * 0.6, ry: rnd() * 6 }); else if (r < 0.62) crys.push({ x, y: y - 0.1, z, s: 0.7 + rnd() * 0.6, ry: rnd() * 6 }); continue; }
       if (r < 0.78) trees.push({ x, y: y - 0.1, z, s: 0.9 + rnd() * 0.8, ry: rnd() * 6 });
       else if (r < 0.95) rocks.push({ x, y: y - 0.2, z, s: 1 + rnd() * 1.6, sy: 0.8 + rnd(), ry: rnd() * 6 });
       else crys.push({ x, y: y - 0.1, z, s: 0.9 + rnd() * 0.8, ry: rnd() * 6 });

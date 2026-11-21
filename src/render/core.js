@@ -87,7 +87,7 @@ export class RenderCore {
     const rt = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, samples: Q.msaa });
     this.composer = new EffectComposer(r, rt);
     this.composer.addPass(new RenderPass(this.scene, this.camera));
-    this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.5, 0.45, 1.15);
+    this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.42, 0.4, 1.2);
     this.bloom.enabled = Q.bloom;
     this.composer.addPass(this.bloom);
     this.composer.addPass(new OutputPass());
@@ -127,6 +127,7 @@ export class RenderCore {
     if (this.shake > 0) { this.shake = Math.max(0, this.shake - dt * 2.2); const s = this.shake * 0.35; ox = (Math.random() - 0.5) * s; oz = (Math.random() - 0.5) * s; }
     this.camera.position.set(t.x + sx * back + ox, t.y + up, t.z + sz * back + oz);
     this.camera.lookAt(t.x - sx * 2.6 + ox, t.y, t.z - sz * 2.6 + oz);
+    U.uCamT.value.set(t.x, t.z, sx, sz);
     // shadow camera follows (snapped to texels)
     const snap = 60 / this.sun.shadow.mapSize.x;
     const cx = Math.round((t.x - sx * 4) / snap) * snap, cz = Math.round((t.z - sz * 4) / snap) * snap;

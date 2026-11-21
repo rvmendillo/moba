@@ -65,12 +65,14 @@ export class GameView {
         const flash = { value: 0 };
         M = buildHumanoid(def.look, { outline: true, flash });
         M.flash = flash;
-        barH = 2.55 * (def.look.height || 1) + 0.25;
+        M.root.scale.multiplyScalar(1.3);
+        barH = 2.55 * 1.3 * (def.look.height || 1) + 0.3;
         const hd = this.state.hero(u.id);
         const petId = hd ? PETS[hd.pet]?.id : 'fox';
-        if (petId) { pet = buildPet(petId); pet.seed = u.id; this.scene.add(pet.root); pet.pos = new THREE.Vector3(u.x, 0, u.z); }
+        if (petId) { pet = buildPet(petId); pet.seed = u.id; pet.root.scale.setScalar(1.35); this.scene.add(pet.root); pet.pos = new THREE.Vector3(u.x, 0, u.z); }
         const ringCol = u.id === this.myId ? 0x6dff9a : team === this.myTeam ? 0x4fb8ff : 0xff4d63;
         const ring = new THREE.Mesh(ringGeo, glowBasic(ringCol, 1.6));
+        ring.scale.setScalar(1.15);
         ring.material.opacity = 0.85;
         ring.position.y = 0.06; ring.renderOrder = 2;
         root.add(ring);
@@ -84,7 +86,8 @@ export class GameView {
       case 1: {
         const type = MINION_TYPE_LIST[u.type];
         M = buildMinion(type, team);
-        barH = type === 'siege' ? 2.1 : type === 'titan' ? 4.2 : 1.55;
+        if (type !== 'titan') M.root.scale.setScalar(1.2);
+        barH = type === 'siege' ? 2.4 : type === 'titan' ? 4.2 : 1.8;
         break;
       }
       case 2: M = buildTower(team); barH = 8.2; break;

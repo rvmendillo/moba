@@ -370,7 +370,7 @@ export function animateCreature(M, st, t) {
   if (st.dead) {
     const d = Math.min(1, st.deadAge / 0.5);
     M.root.rotation.z = d * 1.5 * (M.seed % 2 ? 1 : -1);
-    M.root.position.y -= Math.max(0, st.deadAge - 1.0) * 1.2;
+    M.root.position.y = -Math.max(0, st.deadAge - 1.0) * 1.2;
   } else M.root.rotation.z = 0;
 }
 export function animateStructure(M, t, alive, team) {

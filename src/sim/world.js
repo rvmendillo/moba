@@ -920,7 +920,8 @@ export class World {
       case 'autolvl': h.autoLevel = !!c.on; if (h.autoLevel) this.autoSkill(h); break;
     }
   }
-  setInput(h, inp) { if (h) Object.assign(h.input, inp); }
+  setInput(h, inp) { if (h && !h.brain) Object.assign(h.input, inp); }
+  makeBot(h) { if (h && !h.brain) { h.isBot = true; h.brain = new BotBrain(this, h, h.role, this.difficulty); this.autoSkill(h); } }
 
   // ------------------------------------------------------------ targeting
   pickAttackTarget(h, mode) {

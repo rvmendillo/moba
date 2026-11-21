@@ -7,6 +7,7 @@ export const U = {
   uFowOn: { value: 0 },
   uPlayer: { value: new THREE.Vector3(9999, 0, 9999) },
   uPlayerBush: { value: 0 },
+  uCamT: { value: new THREE.Vector4(0, 0, 0, 1) }, // target x, z, back dir x, back dir z
 };
 
 // ---------------------------------------------------------------- noise
@@ -98,16 +99,23 @@ export function injectWorld(mat, opts = {}) {
     sh.uniforms.uFow = U.uFow;
     sh.uniforms.uFowOn = U.uFowOn;
     sh.uniforms.uPlayer = U.uPlayer;
+    sh.uniforms.uCamT = U.uCamT;
     sh.vertexShader = sh.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vWorldP;')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vWorldP; varying float vOcc; uniform vec4 uCamT;')
       .replace('#include <project_vertex>', `#include <project_vertex>
         vec4 wpI = vec4(transformed, 1.0);
+        vec4 org = vec4(0.0, 0.0, 0.0, 1.0);
         #ifdef USE_INSTANCING
           wpI = instanceMatrix * wpI;
+          org = instanceMatrix * org;
         #endif
-        vWorldP = (modelMatrix * wpI).xyz;`);
+        vWorldP = (modelMatrix * wpI).xyz;
+        vec2 rel = (modelMatrix * org).xz - uCamT.xy;
+        float sAlong = dot(rel, uCamT.zw);
+        float sSide = abs(rel.x * uCamT.w - rel.y * uCamT.z);
+        vOcc = ${opts.occlude ? '1.0' : '0.0'} * smoothstep(1.2, 3.5, sAlong) * (1.0 - smoothstep(9.0, 13.0, sAlong)) * (1.0 - smoothstep(4.5, 8.5, sSide));`);
     let frag = sh.fragmentShader.replace('#include <common>', `#include <common>
-      varying vec3 vWorldP;
+      varying vec3 vWorldP; varying float vOcc;
       uniform float uTime; uniform sampler2D uFow; uniform float uFowOn; uniform vec3 uPlayer;
       float hash12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }`);
     let extra = '';
@@ -130,9 +138,11 @@ export function injectWorld(mat, opts = {}) {
         outgoingLight = mix(outgoingLight, outgoingLight * vec3(0.86, 0.9, 1.04), (1.0 - vis) * 0.5);
       }`;
     frag = frag.replace('#include <opaque_fragment>', extra + '\n#include <opaque_fragment>');
+    if (opts.occlude) frag = frag.replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+      if (vOcc > 0.01) { vec2 dp = floor(gl_FragCoord.xy * 0.5); float dth = fract(sin(dot(dp, vec2(12.9898, 78.233))) * 43758.5453); if (dth < vOcc * 0.72) discard; }`);
     sh.fragmentShader = frag;
   };
-  mat.customProgramCacheKey = () => 'world' + (opts.sparkle || 0) + (opts.fow === false ? 'nf' : 'f') + (mat.type);
+  mat.customProgramCacheKey = () => 'world' + (opts.sparkle || 0) + (opts.fow === false ? 'nf' : 'f') + (opts.occlude ? 'o' : '') + (mat.type);
   return mat;
 }
 
