@@ -51,11 +51,15 @@ export class MatchSession {
       const me = this.world.heroes[cfg.myIndex ?? 0];
       this.myHero = me;
       this.myId = me.id; this.myTeam = me.team;
+      this.heroDef = me.def;
+      this.spellIdx = SPELLS.findIndex((s) => s.id === me.spell);
       this.state = new ClientState(1 / 30);
       this.heroByNet = new Map();
       for (const h of this.world.heroes) if (h.netId) this.heroByNet.set(h.netId, h);
     } else {
       this.myId = cfg.myId; this.myTeam = cfg.myTeam;
+      this.heroDef = HERO_BY_ID[cfg.heroId] || null;
+      this.spellIdx = SPELLS.findIndex((s) => s.id === cfg.spellId);
       this.state = new ClientState(0.12);
     }
     this.view = new GameView(app.core, this.state, { myId: this.myId, myTeam: this.myTeam, overlayCanvas: app.ov, onEvent: (e) => this.onEvent(e) });

@@ -64,7 +64,7 @@ export class Hud {
     R.append(this.joyZone, this.joy);
     this.bindJoystick();
     // skill buttons
-    const def = HEROES[this.myHero()?.def ?? 0];
+    const def = this.s.heroDef || HEROES[this.myHero()?.def ?? 0];
     this.def = def;
     this.btns = [];
     def.skills.forEach((sk, i) => {
@@ -82,7 +82,7 @@ export class Hud {
     R.append(tmin, ttow);
     this.bindHold(tmin, 'minion'); this.bindHold(ttow, 'tower');
     const hero = this.myHero();
-    const sp = SPELLS[hero ? hero.spell : 0] || SPELLS[0];
+    const sp = SPELLS[this.s.spellIdx >= 0 ? this.s.spellIdx : hero ? hero.spell : 0] || SPELLS[0];
     this.spellBtn = h('div.sk.spell', { style: { backgroundImage: `url(${spellIcon(sp)})` } }, h('div.cd'));
     R.append(this.spellBtn);
     this.bindSkill(this.spellBtn, 'spell');

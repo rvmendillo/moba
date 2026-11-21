@@ -211,7 +211,7 @@ class App {
     if (!myId) { this.toast('Could not find your hero in this match'); return; }
     const idx = Object.keys(m.heroIds).indexOf(myNet);
     const mine = m.roster.find((r) => r.netId === myNet) || m.roster[idx];
-    const cfg = { mode: 'client', myId, myTeam: mine ? mine.team : 0, items: m.items, accountLevel: m.level };
+    const cfg = { mode: 'client', myId, myTeam: mine ? mine.team : 0, items: m.items, accountLevel: m.level, heroId: mine && mine.heroId, spellId: mine && mine.spellId };
     this.launch(m.roster, () => {
       const s = new MatchSession(this, cfg, net);
       for (const [from, msg] of buffered.splice(0)) s.onNet(from, msg);

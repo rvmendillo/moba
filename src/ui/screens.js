@@ -215,7 +215,7 @@ export function showLobby(app, L) {
         h('div', { style: { flex: 1 } }),
         h('button.btn', { onclick: () => L.onPick() }, 'Choose Hero'),
         L.host ? h('button.btn.gold', { onclick: () => L.onStart() }, '▶ Start Match') : null),
-      found, col(0), col(1));
+      ...[found, col(0), col(1)].filter(Boolean));
   };
   L.render = render;
   render();
