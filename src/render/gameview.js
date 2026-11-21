@@ -52,6 +52,7 @@ export class GameView {
   dispose() {
     for (const v of this.views.values()) { this.scene.remove(v.root); if (v.pet) this.scene.remove(v.pet.root); }
     for (const r of this.towerRings.values()) this.scene.remove(r);
+    if (this.lockRing) this.scene.remove(this.lockRing);
     this.views.clear(); this.towerRings.clear();
     this.scene.remove(this.fx.group); this.scene.remove(this.fx.parts.points);
     this.fx.parts.geo.dispose();
@@ -241,6 +242,25 @@ export class GameView {
     U.uPlayer.value.set(me ? me.x : 9999, 0, me ? me.z : 9999);
     // tower range warnings
     this.updateTowerRings(snap.units, me);
+    // lock-on marker under my current attack target
+    if (!this.lockRing) {
+      this.lockRing = new THREE.Mesh(new THREE.RingGeometry(0.85, 1.05, 40).rotateX(-Math.PI / 2), glowBasic(0xff5a5a, 1.8));
+      this.lockRing.renderOrder = 3;
+      this.scene.add(this.lockRing);
+    }
+    const tv = me && me.target ? this.views.get(me.target) : null;
+    this.lockRing.visible = !!(tv && tv.root.visible);
+    if (this.lockRing.visible) {
+      const r = tv.kind === 2 || tv.kind === 3 ? 2.2 : tv.boss ? 3.2 : tv.kind === 0 ? 1.0 : 0.8;
+      this.lockRing.position.set(tv.x, tv.y + 0.1, tv.z);
+      this.lockRing.scale.setScalar(r * (1 + Math.sin(this.time * 8) * 0.05));
+      this.lockRing.rotation.y = this.time * 2;
+    }
+    // end of match: look at the fallen crystal
+    if (S.over >= 0 && !this.camOverride) {
+      const core = snap.units.find((u) => u.kind === 3 && !(u.flags & F.alive));
+      if (core) this.camOverride = { x: core.x, z: core.z };
+    }
     // fog of war
     this.fowT -= dt;
     if (this.fowT <= 0) { this.fowT = 0.15; this.drawFow(snap.units); }

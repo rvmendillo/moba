@@ -2,7 +2,7 @@
 import { ANIMS, F } from '../sim/world.js';
 
 export function decodeUnit(a) {
-  return { id: a[0], kind: a[1], type: a[2], team: a[3], x: a[4] / 100, z: a[5] / 100, facing: a[6] / 100, hp: a[7], maxHp: a[8], mana: a[9], maxMana: a[10], level: a[11], flags: a[12], anim: ANIMS[a[13]] || 'idle', animAge: a[14] / 100, shield: a[15], airH: a[16] / 100, recall: a[17] / 10 };
+  return { id: a[0], kind: a[1], type: a[2], team: a[3], x: a[4] / 100, z: a[5] / 100, facing: a[6] / 100, hp: a[7], maxHp: a[8], mana: a[9], maxMana: a[10], level: a[11], flags: a[12], anim: ANIMS[a[13]] || 'idle', animAge: a[14] / 100, shield: a[15], airH: a[16] / 100, recall: a[17] / 10, target: a[18] || 0 };
 }
 export function decodeHero(a) {
   return {

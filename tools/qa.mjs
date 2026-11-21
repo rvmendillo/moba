@@ -37,7 +37,7 @@ await page.screenshot({ path: O + '_score.png' });
 await page.locator('.panel .x').click();
 // force win
 await page.evaluate(() => { const s = window.app.session; const c = s.world.cores.find((c) => c.team !== s.myTeam); c.invuln = false; s.world.dmg(null, c, 1e7, 't', { force: 1 }); });
-await page.waitForTimeout(6500);
+await page.waitForTimeout(9000);
 await page.screenshot({ path: O + '_end.png' });
 console.log('profile xp', await page.evaluate(() => JSON.stringify({ xp: window.app.profile.xp, wins: window.app.profile.wins })));
 await browser.close();

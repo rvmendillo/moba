@@ -1548,6 +1548,7 @@ export class World {
         Math.ceil(u.hp), Math.round(u.st.maxHp), Math.round(u.mana || 0), Math.round(u.st.maxMana || 0),
         u.level || 0, f, ANIM_CODE[u.anim] || 0, Math.min(999, Math.round((T - u.animT) * 100)),
         Math.round(u.shieldAmt()), Math.round(u.airH * 100), u.kind === 'hero' ? Math.round(u.recallT * 10) : 0,
+        u.kind === 'hero' && u.target && u.target.alive ? u.target.id : 0,
       ]);
     }
     const ps = this.projs.map((p) => [p.id, PROJ_CODE[p.kind] ?? 0, Math.round(p.x * 100), Math.round(p.z * 100), Math.round(p.y * 100), p.team, Math.round(Math.atan2(p.dx, p.dz) * 100)]);
