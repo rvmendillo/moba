@@ -1,7 +1,7 @@
 // In-match HUD: touch controls, skills with drag-to-aim, minimap, scoreboard, shop, settings, feed.
 import { h, fmtTime } from './dom.js';
 import { HEROES, skillText } from '../data/heroes.js';
-import { ITEMS, ITEM_BY_ID, ITEM_CATS, SPELLS } from '../data/items.js';
+import { ITEMS, ITEM_BY_ID, ITEM_CATS, SPELLS, effectiveBuild } from '../data/items.js';
 import { F } from '../sim/world.js';
 import { skillIcon, itemIcon, spellIcon, icon } from './icons.js';
 import { Minimap } from './minimap.js';
@@ -332,8 +332,8 @@ export class Hud {
   }
   // next affordable step of the recommended build
   nextBuild(hero) {
-    const avail = this.s.itemAvail;
-    const build = HEROES[hero.def].build.filter((id) => avail.has(id));
+    if (!this.build) this.build = effectiveBuild(HEROES[hero.def].build, this.s.itemAvail);
+    const build = this.build;
     for (const id of build) {
       if (hero.items.includes(id)) continue;
       const it = ITEM_BY_ID[id];
@@ -430,7 +430,7 @@ export class Hud {
       const hero = this.myHero();
       P.innerHTML = '';
       const tabs = h('div.tabs', {}, ...[['rec', '⭐ Recommended'], ...ITEM_CATS.map((c) => [c.id, c.name])].map(([id, name]) => h(`button.tab${cat === id ? '.on' : ''}`, { onclick: () => { cat = id; render(); } }, name)));
-      const list = cat === 'rec' ? HEROES[hero.def].build.flatMap((id) => [...(ITEM_BY_ID[id].from || []), id]).filter((v, i, a) => a.indexOf(v) === i).map((id) => ITEM_BY_ID[id]) : ITEMS.filter((i) => i.cat === cat);
+      const list = cat === 'rec' ? effectiveBuild(HEROES[hero.def].build, avail).flatMap((id) => [...(ITEM_BY_ID[id].from || []), id]).filter((v, i, a) => a.indexOf(v) === i).map((id) => ITEM_BY_ID[id]) : ITEMS.filter((i) => i.cat === cat);
       const grid = h('div.items', {}, ...list.map((it) => {
         const locked = !avail.has(it.id);
         const cost = this.costFor(hero, it.id);

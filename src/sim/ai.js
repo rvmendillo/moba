@@ -1,6 +1,6 @@
 // Bot AI: per-hero brain + per-team coordinator.
 import { BASES, LANES, PITS, LANE_LEN, laneProgress, lanePoint } from './map.js';
-import { ITEM_BY_ID } from '../data/items.js';
+import { ITEM_BY_ID, effectiveBuild } from '../data/items.js';
 
 const DIFF = {
   easy: { react: 0.6, aimErr: 0.3, lead: 0.3, retreat: 0.2, aggr: 0.8, skillChance: 0.5, kite: 0, dodge: 0, think: 0.4 },
@@ -418,7 +418,8 @@ export class BotBrain {
   // ---------------------------------------------------------- economy
   shop() {
     const w = this.w, h = this.h;
-    const build = h.def.build.filter((id) => w.itemAvail.has(id));
+    if (!this.build) this.build = effectiveBuild(h.def.build, w.itemAvail);
+    const build = this.build;
     // fill missing from available catalog
     for (const id of build) {
       if (h.items.includes(id)) continue;

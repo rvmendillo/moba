@@ -27,40 +27,55 @@ export const ITEMS = [
   // ---- attack ----
   { id: 'a_cleaver', name: 'Glacier Cleaver', cat: 'atk', cost: 2050, from: ['t_axe', 't_dagger'], stats: { atk: 60, cdr: 0.1 }, passive: 'frostbite', pdesc: 'Basic attacks slow the target by 15% for 1s.', unlock: 1, tier: 3, icon: ['cleaver', '#9fe8ff'] },
   { id: 'a_blade', name: 'Bloodfrost Blade', cat: 'atk', cost: 1900, from: ['t_fang', 't_dagger'], stats: { atk: 45, ls: 0.15 }, unlock: 1, tier: 3, icon: ['sword', '#ff7f9a'] },
-  { id: 'a_bow', name: 'Stormstring Bow', cat: 'atk', cost: 2000, from: ['t_gloves', 't_charm'], stats: { as: 0.35, crit: 0.2 }, passive: 'chain', pdesc: 'Every 3rd basic attack chains lightning to 2 nearby enemies for 60 (+30% Physical Attack) magic damage.', unlock: 2, tier: 3, icon: ['bow', '#ffe57a'] },
-  { id: 'a_fang', name: "Winter's Fang", cat: 'atk', cost: 2150, from: ['t_axe', 't_dagger'], stats: { atk: 70, apenP: 0.25 }, pdesc: '+25% Physical Penetration.', unlock: 3, tier: 3, icon: ['fangBlade', '#bfe9ff'] },
-  { id: 'a_talon', name: 'Ember Talon', cat: 'atk', cost: 2100, from: ['t_gloves', 't_dagger'], stats: { as: 0.25, atk: 30 }, passive: 'hpburn', pdesc: 'Basic attacks deal bonus physical damage equal to 2.5% of the target\'s current HP.', unlock: 5, tier: 3, icon: ['talon', '#ff9a4a'] },
+  { id: 'a_bow', name: 'Stormstring Bow', cat: 'atk', cost: 2000, from: ['t_gloves', 't_charm'], stats: { as: 0.35, crit: 0.2 }, passive: 'chain', pdesc: 'Every 3rd basic attack chains lightning to 2 nearby enemies for 60 (+30% Physical Attack) magic damage.', unlock: 1, tier: 3, icon: ['bow', '#ffe57a'] },
+  { id: 'a_fang', name: "Winter's Fang", cat: 'atk', cost: 2150, from: ['t_axe', 't_dagger'], stats: { atk: 70, apenP: 0.25 }, pdesc: '+25% Physical Penetration.', unlock: 2, tier: 3, icon: ['fangBlade', '#bfe9ff'] },
+  { id: 'a_talon', name: 'Ember Talon', cat: 'atk', cost: 2100, from: ['t_gloves', 't_dagger'], stats: { as: 0.25, atk: 30 }, passive: 'hpburn', pdesc: 'Basic attacks deal bonus physical damage equal to 2.5% of the target\'s current HP.', unlock: 4, tier: 3, icon: ['talon', '#ff9a4a'] },
   { id: 'a_great', name: 'Avalanche Greatsword', cat: 'atk', cost: 2350, from: ['t_axe', 't_charm'], stats: { atk: 85, crit: 0.15, critDmg: 0.4 }, pdesc: '+40% Critical Damage.', unlock: 6, tier: 3, icon: ['greatsword', '#d8f3ff'] },
   { id: 'a_reaper', name: "Executioner's Rime", cat: 'atk', cost: 2050, from: ['t_axe', 't_belt'], stats: { atk: 55, hp: 300 }, passive: 'execute', pdesc: 'Deal 20% more damage to enemies below 40% HP.', unlock: 8, tier: 3, icon: ['scythe', '#a8b8ff'] },
-  { id: 'a_tempest', name: 'Tempest Spear', cat: 'atk', cost: 2050, from: ['t_gloves', 't_fang'], stats: { atk: 40, as: 0.2, ls: 0.08 }, passive: 'rampage', pdesc: 'Kills and assists grant 30% movement speed for 3s.', unlock: 10, tier: 3, icon: ['spear', '#c4f0ff'] },
+  { id: 'a_tempest', name: 'Tempest Spear', cat: 'atk', cost: 2050, from: ['t_gloves', 't_fang'], stats: { atk: 40, as: 0.2, ls: 0.08 }, passive: 'rampage', pdesc: 'Kills and assists grant 30% movement speed for 3s.', unlock: 11, tier: 3, icon: ['spear', '#c4f0ff'] },
   // ---- magic ----
   { id: 'm_staff', name: 'Aurora Staff', cat: 'mag', cost: 2000, from: ['t_shard', 't_glass'], stats: { mag: 75, cdr: 0.1, mana: 200 }, unlock: 1, tier: 3, icon: ['staff', '#a6ffdf'] },
-  { id: 'm_scepter', name: 'Glacial Scepter', cat: 'mag', cost: 2100, from: ['t_wand', 't_belt'], stats: { mag: 65, hp: 450 }, passive: 'skillslow', pdesc: 'Skill damage slows enemies by 20% for 1s.', unlock: 2, tier: 3, icon: ['scepter', '#9fe6ff'] },
-  { id: 'm_tome', name: 'Soulfrost Tome', cat: 'mag', cost: 1900, from: ['t_shard', 't_orb'], stats: { mag: 65, sv: 0.15, mana: 300 }, unlock: 3, tier: 3, icon: ['book', '#c9a8ff'] },
-  { id: 'm_prism', name: 'Void Prism', cat: 'mag', cost: 2050, from: ['t_wand', 't_shard'], stats: { mag: 70, mpenP: 0.3 }, pdesc: '+30% Magic Penetration.', unlock: 4, tier: 3, icon: ['prism', '#b28aff'] },
+  { id: 'm_scepter', name: 'Glacial Scepter', cat: 'mag', cost: 2100, from: ['t_wand', 't_belt'], stats: { mag: 65, hp: 450 }, passive: 'skillslow', pdesc: 'Skill damage slows enemies by 20% for 1s.', unlock: 1, tier: 3, icon: ['scepter', '#9fe6ff'] },
+  { id: 'm_tome', name: 'Soulfrost Tome', cat: 'mag', cost: 1900, from: ['t_shard', 't_orb'], stats: { mag: 65, sv: 0.15, mana: 300 }, unlock: 1, tier: 3, icon: ['book', '#c9a8ff'] },
+  { id: 'm_prism', name: 'Void Prism', cat: 'mag', cost: 2050, from: ['t_wand', 't_shard'], stats: { mag: 70, mpenP: 0.3 }, pdesc: '+30% Magic Penetration.', unlock: 2, tier: 3, icon: ['prism', '#b28aff'] },
   { id: 'm_orb', name: 'Starfall Orb', cat: 'mag', cost: 2300, from: ['t_wand', 't_wand'], stats: { mag: 110 }, passive: 'amp', pdesc: 'Increases total Magic Power by 20%.', unlock: 7, tier: 3, icon: ['star', '#fff0a0'] },
   { id: 'm_glass', name: 'Crystal Hourglass', cat: 'mag', cost: 2000, from: ['t_glass', 't_orb'], stats: { mag: 55, cdr: 0.2, mpReg: 4 }, unlock: 9, tier: 3, icon: ['hourglass', '#9fe8ff'] },
-  { id: 'm_flame', name: 'Pyre Lantern', cat: 'mag', cost: 2250, from: ['t_wand', 't_glass'], stats: { mag: 80, cdr: 0.05 }, passive: 'pyre', pdesc: 'Damaging an enemy hero with a skill burns them for 3% of their max HP over 3s.', unlock: 11, tier: 3, icon: ['lantern', '#ffb24a'] },
+  { id: 'm_flame', name: 'Pyre Lantern', cat: 'mag', cost: 2250, from: ['t_wand', 't_glass'], stats: { mag: 80, cdr: 0.05 }, passive: 'pyre', pdesc: 'Damaging an enemy hero with a skill burns them for 3% of their max HP over 3s.', unlock: 12, tier: 3, icon: ['lantern', '#ffb24a'] },
   // ---- defense ----
   { id: 'd_aegis', name: 'Icewall Aegis', cat: 'def', cost: 1850, from: ['t_belt', 't_plate'], stats: { hp: 900, armor: 35 }, unlock: 1, tier: 3, icon: ['shield', '#9fd0ff'] },
-  { id: 'd_cloak', name: 'Northern Cloak', cat: 'def', cost: 1850, from: ['t_belt', 't_mantle'], stats: { hp: 800, mr: 40, hpReg: 8 }, unlock: 2, tier: 3, icon: ['cloak', '#a8b8ff'] },
-  { id: 'd_rime', name: 'Rimebound Plate', cat: 'def', cost: 1800, from: ['t_plate', 't_plate'], stats: { armor: 65 }, passive: 'cold', pdesc: 'Enemies who basic-attack you lose 20% attack speed for 2s.', unlock: 4, tier: 3, icon: ['armor', '#c8e8ff'] },
-  { id: 'd_thorn', name: 'Thornfrost Mail', cat: 'def', cost: 1850, from: ['t_plate', 't_belt'], stats: { armor: 50, hp: 400 }, passive: 'thorns', pdesc: 'Reflects 25% of basic attack damage taken as magic damage.', unlock: 5, tier: 3, icon: ['thorn', '#9ff0d0'] },
-  { id: 'd_guard', name: 'Guardian Aurora', cat: 'def', cost: 2200, from: ['t_belt', 't_moss'], stats: { hp: 1000, hpReg: 10 }, passive: 'aurora', pdesc: 'When HP drops below 30%, gain a shield of 25% Max HP for 3s (60s cooldown).', unlock: 6, tier: 3, icon: ['aurora', '#a6ffdf'] },
-  { id: 'd_helm', name: 'Frostbound Helm', cat: 'def', cost: 2000, from: ['t_belt', 't_belt'], stats: { hp: 1500, hpReg: 15 }, unlock: 8, tier: 3, icon: ['helm', '#d8e8ff'] },
-  { id: 'd_veil', name: 'Moonsilk Veil', cat: 'def', cost: 1900, from: ['t_mantle', 't_mantle'], stats: { mr: 60, cdr: 0.1 }, unlock: 10, tier: 3, icon: ['veil', '#d0c0ff'] },
-  { id: 'd_bulwark', name: "Titan's Bulwark", cat: 'def', cost: 2300, from: ['t_plate', 't_mantle'], stats: { armor: 30, mr: 30, hp: 700 }, passive: 'tenacity', pdesc: 'Reduces the duration of crowd control on you by 25%.', unlock: 12, tier: 3, icon: ['bulwark', '#ffd88a'] },
+  { id: 'd_cloak', name: 'Northern Cloak', cat: 'def', cost: 1850, from: ['t_belt', 't_mantle'], stats: { hp: 800, mr: 40, hpReg: 8 }, unlock: 1, tier: 3, icon: ['cloak', '#a8b8ff'] },
+  { id: 'd_rime', name: 'Rimebound Plate', cat: 'def', cost: 1800, from: ['t_plate', 't_plate'], stats: { armor: 65 }, passive: 'cold', pdesc: 'Enemies who basic-attack you lose 20% attack speed for 2s.', unlock: 1, tier: 3, icon: ['armor', '#c8e8ff'] },
+  { id: 'd_thorn', name: 'Thornfrost Mail', cat: 'def', cost: 1850, from: ['t_plate', 't_belt'], stats: { armor: 50, hp: 400 }, passive: 'thorns', pdesc: 'Reflects 25% of basic attack damage taken as magic damage.', unlock: 3, tier: 3, icon: ['thorn', '#9ff0d0'] },
+  { id: 'd_guard', name: 'Guardian Aurora', cat: 'def', cost: 2200, from: ['t_belt', 't_moss'], stats: { hp: 1000, hpReg: 10 }, passive: 'aurora', pdesc: 'When HP drops below 30%, gain a shield of 25% Max HP for 3s (60s cooldown).', unlock: 5, tier: 3, icon: ['aurora', '#a6ffdf'] },
+  { id: 'd_helm', name: 'Frostbound Helm', cat: 'def', cost: 2000, from: ['t_belt', 't_belt'], stats: { hp: 1500, hpReg: 15 }, unlock: 10, tier: 3, icon: ['helm', '#d8e8ff'] },
+  { id: 'd_veil', name: 'Moonsilk Veil', cat: 'def', cost: 1900, from: ['t_mantle', 't_mantle'], stats: { mr: 60, cdr: 0.1 }, unlock: 13, tier: 3, icon: ['veil', '#d0c0ff'] },
+  { id: 'd_bulwark', name: "Titan's Bulwark", cat: 'def', cost: 2300, from: ['t_plate', 't_mantle'], stats: { armor: 30, mr: 30, hp: 700 }, passive: 'tenacity', pdesc: 'Reduces the duration of crowd control on you by 25%.', unlock: 14, tier: 3, icon: ['bulwark', '#ffd88a'] },
   // ---- boots ----
   { id: 'b_wind', name: 'Windstep Boots', cat: 'move', cost: 750, from: ['boots'], stats: { ms: 0.9, as: 0.15 }, unlock: 1, tier: 2, icon: ['boot', '#bff7c9'] },
   { id: 'b_rune', name: 'Runic Boots', cat: 'move', cost: 750, from: ['boots'], stats: { ms: 0.9, mpen: 10 }, unlock: 1, tier: 2, icon: ['boot', '#c8a8ff'] },
-  { id: 'b_iron', name: 'Ironclad Boots', cat: 'move', cost: 750, from: ['boots'], stats: { ms: 0.9, armor: 22 }, unlock: 2, tier: 2, icon: ['boot', '#c9d2dd'] },
-  { id: 'b_myst', name: 'Mystic Treads', cat: 'move', cost: 750, from: ['boots'], stats: { ms: 0.9, mr: 22 }, unlock: 3, tier: 2, icon: ['boot', '#9fb8ff'] },
-  { id: 'b_mind', name: 'Swiftmind Boots', cat: 'move', cost: 750, from: ['boots'], stats: { ms: 0.9, cdr: 0.1 }, unlock: 5, tier: 2, icon: ['boot', '#fff0a0'] },
+  { id: 'b_iron', name: 'Ironclad Boots', cat: 'move', cost: 750, from: ['boots'], stats: { ms: 0.9, armor: 22 }, unlock: 1, tier: 2, icon: ['boot', '#c9d2dd'] },
+  { id: 'b_myst', name: 'Mystic Treads', cat: 'move', cost: 750, from: ['boots'], stats: { ms: 0.9, mr: 22 }, unlock: 1, tier: 2, icon: ['boot', '#9fb8ff'] },
+  { id: 'b_mind', name: 'Swiftmind Boots', cat: 'move', cost: 750, from: ['boots'], stats: { ms: 0.9, cdr: 0.1 }, unlock: 3, tier: 2, icon: ['boot', '#fff0a0'] },
   // ---- jungle / roam ----
   { id: 'j_talisman', name: "Hunter's Talisman", cat: 'jg', cost: 300, stats: { atk: 8 }, passive: 'jungle', pdesc: 'Deal 25% more damage to monsters and gain 20% more gold and EXP from them.', unlock: 1, tier: 1, icon: ['talisman', '#ffb36b'] },
   { id: 'j_charm', name: 'Guardian Charm', cat: 'jg', cost: 300, stats: { hpReg: 4 }, passive: 'roam', pdesc: 'Gain gold whenever a nearby allied hero gets gold from minions.', unlock: 1, tier: 1, icon: ['charm', '#fff2b0'] },
 ];
 export const ITEM_BY_ID = Object.fromEntries(ITEMS.map((it) => [it.id, it]));
+// A hero's build with locked items swapped for unlocked items of the same category.
+export function effectiveBuild(build, avail) {
+  const out = [];
+  for (const id of build) {
+    if (avail.has(id)) { if (!out.includes(id)) out.push(id); continue; }
+    const it = ITEM_BY_ID[id];
+    const alt = ITEMS.find((x) => x.cat === it.cat && x.tier === it.tier && avail.has(x.id) && !out.includes(x.id) && !build.includes(x.id));
+    if (alt) out.push(alt.id);
+  }
+  // fill the remaining slots with unlocked legendaries (defense first, then the build's main category)
+  const main = ITEM_BY_ID[build[2]]?.cat || 'def';
+  const extras = ITEMS.filter((x) => x.tier === 3 && avail.has(x.id) && !out.includes(x.id)).sort((a, b) => (a.cat === 'def' ? 0 : a.cat === main ? 1 : 2) - (b.cat === 'def' ? 0 : b.cat === main ? 1 : 2));
+  for (const x of extras) { if (out.length >= 6) break; out.push(x.id); }
+  return out.slice(0, 6);
+}
 for (const it of ITEMS) if (!it.unlock) it.unlock = 1;
 
 // Account level rewards (1..15)
